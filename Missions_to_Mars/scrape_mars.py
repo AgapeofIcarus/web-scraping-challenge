@@ -49,7 +49,7 @@ def scrape():
 
     html_table = mars_page.to_html()
 
-    mars_facts["html_table"] = html_table
+    mars_page["html_table"] = html_table
 
     #Open path to pull cerberus hemisphere images and titles
     mars_url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
