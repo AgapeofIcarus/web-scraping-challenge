@@ -42,3 +42,39 @@ def scrape():
     #Pull table from Mars Facts page
     mars_page = pd.read_html('https://space-facts.com/mars/')[0]
 
+    mars_page = ['Stat', 'Measurement']
+    stats = pd.Series(mars_page['Stat'])
+    mars_page['Stat'] = stats.str.strip(':')
+    mars_page = mars_page.set_index('Stat')
+
+    html_table = mars_page.to_html()
+
+    mars_facts["html_table"] = html_table
+
+    #Open path to pull cerberus hemisphere images and titles
+    mars_url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
+    browser.visit(mars_url)
+    site = browser.html
+    hemispheres = BeautifulSoup(site, 'html.parser')
+
+    #Narrow down to prep for for loop
+    results_urls = []
+
+    container = hemispheres.find('div', class_= 'result-list')
+    items = container.find_all('div', class_="item")
+
+    #Use for loop to generate information for results_urls dictionary.
+    for item in items:
+        titles = item.find('h3').text
+        titles = titles.replace("Enhanced", "")
+        links = item.find('a')['href']
+        image_link = 'https://astrogeology.usgs.gov/' + links
+        browser.visit(image_link)
+        new_html = browser.html
+        mars_soups = BeautifulSoup(new_html, 'html.parser')
+        download = mars_soups.find('div', class_= 'downloads')
+        image_urls = download.find('a')['href']
+        results_urls.append({'title': titles, 'img_url': image_urls})
+
+if __name__ == "__main__":
+    scrape()
