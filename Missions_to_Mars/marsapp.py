@@ -9,7 +9,7 @@ conn = 'mongodb://localhost:27017'
 client = Pymongo.MongoClient(conn)
 
 app.config["MONGO_URI"] = "mongodb://localhost:27017/mars"
-mongo = PyMongo(app)
+mongo = Pymongo(app)
 
 @app.route("/")
 def index():
