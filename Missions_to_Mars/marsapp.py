@@ -9,13 +9,13 @@ mongo = Pymongo(app)
 
 @app.route("/")
 def index():
-    mars_data = mongo.mars.find_one()
+    mars_data = mongo.db.mars.find_one()
     
     return render_template("index.html", data=mars_data)
 
 @app.route("/scrape")
 def scrape(): 
-    mars = mongo.mars 
+    mars = mongo.db.mars 
     scraped_data = marsapp.scrape()
     print(scraped_data)
     mars.update({}, scraped_data, upsert=True)
